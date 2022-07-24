@@ -1,0 +1,11 @@
+{
+  "name": "ecommerce-full-stack",
+  "version": "1.0.0",
+  "description": "MERN Stack E-Commerce Project",
+  "main": "backend/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Harsh Jain",
+  "license": "ISC"
+}
