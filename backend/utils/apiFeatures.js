@@ -48,6 +48,18 @@ class ApiFeatures {
         this.query = this.query.find(JSON.parse(queryParametersString));
         return this;
     }
+
+    /**
+     * A method to prepare the query based on the page number provided in the URL string.
+     * 
+     * @param {Number} productsPerPage
+     */
+    pagination = (productsPerPage) => {
+        let pageNumber = this.queryParameters.page || 1; 
+        let numberOfProductsToSkip = (pageNumber - 1) * productsPerPage;
+        this.query = this.query.limit(productsPerPage).skip(numberOfProductsToSkip);
+        return this;
+    }
 }
 
 module.exports = ApiFeatures;

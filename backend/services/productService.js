@@ -43,16 +43,23 @@ class ProductService {
     static getAllProducts = async (req, res) => {
         let products = null;
 
-        //Preparing the query accordingly, so as to search the product based on the keyword.
         let productsFindQuery = Product.find(), queryParameters = req.query;
-        const apiFeatures = new ApiFeatures(productsFindQuery, queryParameters)
-            .search()
-            .filter();
+
+        const productsPerPage = 5;
 
         /*
-            Get all products from db / the products based on the keyword , if any error occurs while retrieving,
-            send appropriate response. The error handling would be done at the place wherever this function 
-            would actually be called.
+            Preparing the query accordingly, so as to search the product based on the keyword, filter the
+            products, showing the products for the corresponding page number.
+        */
+        const apiFeatures = new ApiFeatures(productsFindQuery, queryParameters)
+            .search()
+            .filter()
+            .pagination(productsPerPage);
+
+        /*
+            Get all products from db / the products based on the keyword / the products based on the filter / the
+            number of products based on the page number, if any error occurs while retrieving, send appropriate 
+            response. The error handling would be done at the place wherever this function would actually be called.
         */
         products = await apiFeatures.query;
         
