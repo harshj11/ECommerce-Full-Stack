@@ -1,9 +1,10 @@
 const Product = require('../model/productModel');
 const ErrorHandler = require('../utils/errorHandler');
 const { isValidProductId } = require('../utils/productUtil');
+const ApiFeatures = require('../utils/apiFeatures');
 
 class ProductService {
-    
+
     /**
      * Persit the new product into the database.
      * 
@@ -41,11 +42,26 @@ class ProductService {
      */
     static getAllProducts = async (req, res) => {
         let products = null;
+
+        let productsFindQuery = Product.find(), queryParameters = req.query;
+
+        const productsPerPage = 5;
+
         /*
-            Get all products from db, if any error occurs while saving, send appropriate response. The error
-            handling would be done at the place wherever this function would actually be called.
+            Preparing the query accordingly, so as to search the product based on the keyword, filter the
+            products, showing the products for the corresponding page number.
         */
-        products = await Product.find();
+        const apiFeatures = new ApiFeatures(productsFindQuery, queryParameters)
+            .search()
+            .filter()
+            .pagination(productsPerPage);
+
+        /*
+            Get all products from db / the products based on the keyword / the products based on the filter / the
+            number of products based on the page number, if any error occurs while retrieving, send appropriate 
+            response. The error handling would be done at the place wherever this function would actually be called.
+        */
+        products = await apiFeatures.query;
         
         //Otherwise return success response.
         return res.status(200).json({
