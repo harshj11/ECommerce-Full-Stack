@@ -7,9 +7,11 @@ const errorMiddleware = require('./middleware/error');
 app.use(express.json());
 
 //Imports for Routes
-const products = require('./routes/productRoutes');
+const product = require('./routes/productRoutes');
+const user = require('./routes/userRoutes');
 
-app.use("/api/v1", products);
+app.use("/api/v1", product);
+app.use("/api/v1", user);
 
 //Error Middleware, as suggested in express-docs, error handler middleware should be present at last.
 app.use(errorMiddleware);

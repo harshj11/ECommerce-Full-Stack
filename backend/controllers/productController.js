@@ -7,7 +7,7 @@ exports.createProduct = catchAsyncErrors(ProductService.createProduct);
 //Get all products.
 exports.getAllProducts = catchAsyncErrors(ProductService.getAllProducts);
 
-//Update a product with given id(Admin only)
+//Update a product with given id(Admin only).
 exports.updateProduct = catchAsyncErrors(ProductService.updateProduct);
 
 //Delete a product(Admin only).

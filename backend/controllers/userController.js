@@ -1,0 +1,8 @@
+const catchAsyncErrors = require('../middleware/catchAsyncErrors');
+const UserService = require('../services/userService');
+
+//Register new user.
+exports.createUser = catchAsyncErrors(UserService.createUser);
+
+//Login user.
+exports.loginUser = catchAsyncErrors(UserService.loginUser);

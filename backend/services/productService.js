@@ -16,12 +16,11 @@ class ProductService {
      * or an appropriate failure response, if any error occurs.
      */
     static createProduct =  async (req, res, next) => {
-        let product = null;
         /*
             Persist product in db, if any error occurs while saving, send appropriate response. The error
             handling would be done at the place wherever this function would actually be called.
         */
-        product = await Product.create(req.body);
+        const product = await Product.create(req.body);
     
         //Otherwise return success response.
         return res.status(201).json({
@@ -41,12 +40,11 @@ class ProductService {
      * if any error occurs.
      */
     static getAllProducts = async (req, res) => {
-        let products = null;
-
+        
         let productsFindQuery = Product.find(), queryParameters = req.query;
 
         const productsPerPage = 5;
-
+        const productCount = await Product.countDocuments();
         /*
             Preparing the query accordingly, so as to search the product based on the keyword, filter the
             products, showing the products for the corresponding page number.
@@ -61,12 +59,13 @@ class ProductService {
             number of products based on the page number, if any error occurs while retrieving, send appropriate 
             response. The error handling would be done at the place wherever this function would actually be called.
         */
-        products = await apiFeatures.query;
+        const products = await apiFeatures.query;
         
         //Otherwise return success response.
         return res.status(200).json({
             success: true,
-            products
+            products,
+            productCount
         });
     }
 
@@ -81,14 +80,14 @@ class ProductService {
      * failure response, if any error occurs.
      */
     static getProductDetails = async (req, res, next) => {
-        let product = null, productId = req.params.id;
+        let productId = req.params.id;
     
         //First checking if the product id is valid or not.
         if(!isValidProductId(productId))
             return next(new ErrorHandler(412, "Invalid Product Id!"));
         
         //Get product details.
-        product = await Product.findById(productId);
+        const product = await Product.findById(productId);
     
         //If product not found return product not found response.
         if(!product)
