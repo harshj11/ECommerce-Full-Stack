@@ -1,6 +1,6 @@
 const User = require('../model/userModel');
 const ErrorHandler = require('../utils/errorHandler');
-const getJWTToken = require('../utils/jwtToken');
+const sendJWTToken = require('../utils/jwtToken');
 
 class UserService {
 
@@ -30,10 +30,8 @@ class UserService {
             }
         });
 
-        const token = user.getJWTToken();
-    
-        //Otherwise return success response.
-        getJWTToken(user, 201, res);
+        //Otherwise generate the token return success response.
+        sendJWTToken(user, 201, res);
     }
 
     /**
@@ -43,7 +41,8 @@ class UserService {
      * @param {HTTP} res 
      * @param {function} next 
      * 
-     * @return 
+     * @return an appropriate success response having user details, if user logged in successfully
+     * or an appropriate failure response, if any error occurs.
      */
     static loginUser = async (req, res, next) => {
 
@@ -66,7 +65,29 @@ class UserService {
             return next(new ErrorHandler(401, "Invalid credentials, Please try again"));
         
         //Otherwise return success response
-        return getJWTToken(foundUser, 200, res);
+        return sendJWTToken(foundUser, 200, res);
+    }
+
+    /**
+     * Logout User.
+     * 
+     * @param {HTTP} req 
+     * @param {HTTP} res 
+     * @param {function} next 
+     * 
+     * @return 
+     */
+    static logoutUser = async (req, res, next) => {
+
+        res.cookie("token", null, {
+            expires: new Date(Date.now()),
+            httpOnly: true
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Logged out successfully!"
+        });
     }
 }
 
