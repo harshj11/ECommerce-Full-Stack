@@ -4,3 +4,4 @@
 4. express error handling: https://expressjs.com/en/guide/error-handling.html
 5. how mongoose's find() works: https://thecodebarbarian.com/how-find-works-in-mongoose.html
 6. We can use delete operator to remove particular key from on object.
+7. mongoose query projection(select): https://mongoosejs.com/docs/api.html#query_Query-select
