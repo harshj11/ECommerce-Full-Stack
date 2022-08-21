@@ -16,6 +16,10 @@ class ProductService {
      * or an appropriate failure response, if any error occurs.
      */
     static createProduct =  async (req, res, next) => {
+
+        //Setting the User object to track the user who has created the given product.
+        req.body.user = req.user.id;
+
         /*
             Persist product in db, if any error occurs while saving, send appropriate response. The error
             handling would be done at the place wherever this function would actually be called.
