@@ -5,3 +5,4 @@
 5. how mongoose's find() works: https://thecodebarbarian.com/how-find-works-in-mongoose.html
 6. We can use delete operator to remove particular key from on object.
 7. mongoose query projection(select): https://mongoosejs.com/docs/api.html#query_Query-select
+8. Setting up mailing API using nodemailer: https://levelup.gitconnected.com/multi-purposes-mailing-api-using-nodemailer-gmail-google-oauth-28de49118d77

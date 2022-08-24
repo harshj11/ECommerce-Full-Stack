@@ -1,6 +1,7 @@
 const User = require('../model/userModel');
 const ErrorHandler = require('../utils/errorHandler');
 const sendJWTToken = require('../utils/jwtToken');
+const sendEmail = require('../utils/sendEmail');
 
 class UserService {
 
@@ -88,6 +89,44 @@ class UserService {
             success: true,
             message: "Logged out successfully!"
         });
+    }
+
+    static forgotPassword = async(req, res, next) => {
+
+        const user = await User.findOne({email: req.body.email});
+        if(!user)
+            return next(new ErrorHandler(404, "User not found!"));
+        
+        //Get reset password token.
+        const resetToken = user.getResetPasswordToken();
+        
+        //Save this user into database.
+        await user.save({ validateBeforeSave: false });
+
+        const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`;
+
+        const message = `Your password reset token is: \n\n ${resetPasswordURL} \n\n If you haven't requested it, then please ignore.`
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: "E-Commerce Reset Password",
+                message
+            });
+
+            res.status(200).json({
+                success: true,
+                message: `Email sent to ${user.email} successfully`
+            })
+
+        } catch (error) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+
+            await user.save({ validateBeforeSave: false });
+
+            return next(new ErrorHandler(500, error.message));
+        }
     }
 }
 
