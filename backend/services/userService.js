@@ -2,6 +2,7 @@ const User = require('../model/userModel');
 const ErrorHandler = require('../utils/errorHandler');
 const sendJWTToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
+const crypto = require('crypto');
 
 class UserService {
 
@@ -91,6 +92,14 @@ class UserService {
         });
     }
 
+    /**
+     * Forgot Password: send the password reset link to the user. Generates the reset token and then 
+     * sends an email to the respective user.
+     * 
+     * @param {HTTP} req 
+     * @param {HTTP} res 
+     * @param {function} next 
+     */
     static forgotPassword = async(req, res, next) => {
 
         const user = await User.findOne({email: req.body.email});
@@ -127,6 +136,45 @@ class UserService {
 
             return next(new ErrorHandler(500, error.message));
         }
+    }
+
+    /**
+     * Resets the user password. Checks if the token matches and has not expired, then only updates the user 
+     * password and throws the appropriate success or error response.
+     * 
+     * @param {req} req 
+     * @param {res} res 
+     * @param {function} next 
+     */
+    static resetPassword = async (req, res, next) => {
+        /*
+            Converting the token received as a param in URL to an appropriate hash so that it could be 
+            comapred with the one already present in database.
+        */
+        const resetPasswordToken = crypto
+                            .createHash("sha256")
+                            .update(req.params.token)
+                            .digest("hex");
+
+        const user = await User.findOne({
+            resetPasswordToken,
+            resetPasswordExpire: { $gt: Date.now() }
+        });
+
+        if(!user)
+            return next(new ErrorHandler(400, "Reset Password Token is invalid or has expired!"));
+        
+        if(req.body.newPassword !== req.body.confirmNewPassword) 
+            return next(new ErrorHandler(400, "Passwords do not match!"));
+        
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        user.password = req.body.newPassword;
+
+        await user.save();
+
+        sendJWTToken(user, 200, res);
     }
 }
 

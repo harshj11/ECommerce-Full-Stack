@@ -12,3 +12,6 @@ exports.logoutUser = catchAsyncErrors(UserService.logoutUser);
 
 //Forgot password.
 exports.forgotPassword = catchAsyncErrors(UserService.forgotPassword);
+
+//Reset password.
+exports.resetPassword = catchAsyncErrors(UserService.resetPassword);
