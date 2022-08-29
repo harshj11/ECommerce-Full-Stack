@@ -32,7 +32,7 @@ class UserService {
             }
         });
 
-        //Otherwise generate the token return success response.
+        // Otherwise generate the token return success response.
         sendJWTToken(user, 201, res);
     }
 
@@ -50,23 +50,23 @@ class UserService {
 
         const { email, password } = req.body;
 
-        //Checking if user has provided email and password both.
+        // Checking if user has provided email and password both.
         if(!email || !password)
             return next(new ErrorHandler(400, "Please enter Email and Password"));
         
-        //Check if the provided email exists.
+        // Check if the provided email exists.
         const foundUser = await User.findOne({ email }).select("+password");
 
         if(!foundUser)
             return next(new ErrorHandler(401, "Invalid credentials! Please try again"));
         
-        //Check if the entered password is correct or not.
+        // Check if the entered password is correct or not.
         const isPasswordMatched = await foundUser.comparePassword(password);
         
         if(!isPasswordMatched)
             return next(new ErrorHandler(401, "Invalid credentials, Please try again"));
         
-        //Otherwise return success response
+        // Otherwise return success response
         return sendJWTToken(foundUser, 200, res);
     }
 
@@ -106,10 +106,10 @@ class UserService {
         if(!user)
             return next(new ErrorHandler(404, "User not found!"));
         
-        //Get reset password token.
+        // Get reset password token.
         const resetToken = user.getResetPasswordToken();
         
-        //Save this user into database.
+        // Save this user into database.
         await user.save({ validateBeforeSave: false });
 
         const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`;
@@ -140,7 +140,7 @@ class UserService {
 
     /**
      * Resets the user password. Checks if the token matches and has not expired, then only updates the user 
-     * password and throws the appropriate success or error response.
+     * password and sends the appropriate success or error response.
      * 
      * @param {req} req 
      * @param {res} res 
@@ -165,7 +165,7 @@ class UserService {
             return next(new ErrorHandler(400, "Reset Password Token is invalid or has expired!"));
         
         if(req.body.newPassword !== req.body.confirmNewPassword) 
-            return next(new ErrorHandler(400, "Passwords do not match!"));
+            return next(new ErrorHandler(400, "New Password and Confirm Password does not match!"));
         
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
@@ -175,6 +175,66 @@ class UserService {
         await user.save();
 
         sendJWTToken(user, 200, res);
+    }
+
+    /**
+     * Get user details.
+     * 
+     * @param {HTTP} req 
+     * @param {HTTP} res 
+     * @param {function} next 
+     */
+    static getUserDetails = async (req, res, next) => {
+        const user = await User.findById(req.user.id);
+        
+        res.status(200).json({
+            success: true,
+            user
+        });
+    }
+
+    /**
+     * Update user password. Checks if the user password matches the existing password then only updates
+     * the user's password and sends the appropriate success or failure response.
+     * 
+     * @param {HTTP} req 
+     * @param {HTTP} res 
+     * @param {function} next 
+     */
+    static updatePassword = async (req, res, next) => {
+        const user = await User.findById(req.user.id).select("+password");
+        const currentPassword = req.body.currentPassword;
+
+        const isPasswordMatched = await user.comparePassword(currentPassword);
+
+        if(!isPasswordMatched)
+            return next(new ErrorHandler(422, "Current Password is Invalid!"));
+        
+        if(req.body.newPassword !== req.body.confirmNewPassword) 
+            return next(new ErrorHandler(400, "New Password and Confirm Password does not match!"));
+        
+        user.password = req.body.newPassword;
+        
+        await user.save();
+
+        sendJWTToken(user, 200, res);
+    }
+
+    static updateProfile = async (req, res, next) => {
+        const { name, email } = req.body;
+        const newUserData = { name, email }
+
+        // TODO: will add cloudinary later (for updating avatar images)
+
+        await User.findByIdAndUpdate(req.user.id, newUserData, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false       
+        });
+
+        res.status(200).json({
+            "success": true
+        });
     }
 }
 
