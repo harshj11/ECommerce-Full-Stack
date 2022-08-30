@@ -24,3 +24,9 @@ exports.updatePassword = catchAsyncErrors(UserService.updatePassword);
 
 // Update profile details
 exports.updateProfileDetails = catchAsyncErrors(UserService.updateProfile);
+
+// Get all users(Admin route)
+exports.getAllUsers = catchAsyncErrors(UserService.getAllUsers);
+
+// Get specific user details(Admin route)
+exports.getSingleUser = catchAsyncErrors(UserService.getSingleUser);

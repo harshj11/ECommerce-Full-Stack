@@ -220,6 +220,15 @@ class UserService {
         sendJWTToken(user, 200, res);
     }
 
+    /**
+     * Update the user profile.
+     * 
+     * @param {req} req 
+     * @param {res} res 
+     * @param {function} next 
+     * 
+     * @return success response after finding the updating the profile details.
+     */
     static updateProfile = async (req, res, next) => {
         const { name, email } = req.body;
         const newUserData = { name, email }
@@ -234,6 +243,44 @@ class UserService {
 
         res.status(200).json({
             "success": true
+        });
+    }
+
+    /**
+     * Return all users.
+     * 
+     * @param {HTTP} req 
+     * @param {HTTP} res 
+     * @param {function} next
+     * 
+     * @return success response after fetching all the users.
+     */
+    static getAllUsers = async (req, res, next) => {
+        const users = await User.find();
+        res.status(200).json({
+            success: true,
+            users
+        })
+    }
+
+    /**
+     * Return a user details with the given user id.
+     * 
+     * @param {HTTP} req 
+     * @param {HTTP} res 
+     * @param {function} next 
+     * 
+     * @return an appropriate success or failure response.
+     */
+    static getSingleUser = async (req, res, next) => {
+        const user = await User.findById(req.params.id);
+
+        if(!user)
+            return next(404, `User with id ${req.params.id} not found!`);
+        
+        res.status(200).json({
+            success: true,
+            user
         });
     }
 }
