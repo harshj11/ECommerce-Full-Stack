@@ -227,7 +227,7 @@ class UserService {
      * @param {res} res 
      * @param {function} next 
      * 
-     * @return success response after finding the updating the profile details.
+     * @return success response after finding the user and updating the profile details.
      */
     static updateProfile = async (req, res, next) => {
         const { name, email } = req.body;
@@ -247,7 +247,7 @@ class UserService {
     }
 
     /**
-     * Return all users.
+     * Return all users(Admin only).
      * 
      * @param {HTTP} req 
      * @param {HTTP} res 
@@ -264,7 +264,7 @@ class UserService {
     }
 
     /**
-     * Return a user details with the given user id.
+     * Return a user details with the given user id(Admin only).
      * 
      * @param {HTTP} req 
      * @param {HTTP} res 
@@ -281,6 +281,69 @@ class UserService {
         res.status(200).json({
             success: true,
             user
+        });
+    }
+
+    /**
+     * Update the user role(Admin only).
+     * 
+     * @param {req} req 
+     * @param {res} res 
+     * @param {function} next 
+     * 
+     * @return success response if user role has been successfully updated and a failure response if user
+     * does not exists.
+     */
+    static updateUserRole = async (req, res, next) => {
+
+        // Check if the role field has been provided in JSON or not.
+        if(!req.body.hasOwnProperty("role"))
+            return next(new ErrorHandler(422, "Role not entered!"));
+
+        const user = User.findById(req.params.id);
+
+        if(!user)
+            return next(new ErrorHandler(404, `User with id ${req.params.id} not found!`));
+
+        // Check if the id entered in the URL is same as the current user's id.
+        if(req.user.id === req.params.id)
+            return next(new ErrorHandler(405, "You cannot change your own role!"));
+
+        const { role } = req.body;
+        const newUserData = { role }
+
+        await User.findByIdAndUpdate(req.params.id, newUserData, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false       
+        });
+
+        res.status(200).json({
+            "success": true
+        });
+    }
+
+    /**
+     * Delete user(Admin only).
+     * 
+     * @param {req} req 
+     * @param {res} res 
+     * @param {function} next 
+     * 
+     * @return an appropriate success or failure response.
+     */
+    static deleteUser = async (req, res, next) => {
+        const user = await User.findById(req.params.id);
+        
+        if(!user)
+            return next(new ErrorHandler(404, `User with id ${req.params.id} not found!`));
+
+        // TODO: will remove cloudinary later (for updating avatar images)
+        
+        await user.deleteOne();
+
+        res.status(200).json({
+            "success": true
         });
     }
 }

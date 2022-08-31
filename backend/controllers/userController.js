@@ -30,3 +30,9 @@ exports.getAllUsers = catchAsyncErrors(UserService.getAllUsers);
 
 // Get specific user details(Admin route)
 exports.getSingleUser = catchAsyncErrors(UserService.getSingleUser);
+
+// Update user role(Admin route)
+exports.updateUserRole = catchAsyncErrors(UserService.updateUserRole);
+
+// Delete user(Admin route)
+exports.deleteUser = catchAsyncErrors(UserService.deleteUser);
