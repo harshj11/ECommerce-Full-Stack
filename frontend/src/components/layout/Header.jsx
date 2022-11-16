@@ -24,12 +24,19 @@ const Header = () => {
   const [display, setDisplay] = useState('none');
 
   return (
-    <Container maxW='100vw' p={0}>
+    <Container 
+      background='white'
+      maxW='100%' 
+      p={0} 
+      pos='fixed'
+      top={0}
+      zIndex={1}
+    >
       <Flex 
         boxShadow='lg'
         align='center' 
-        justify={['space-between', 'space-between', 'space-around']}
-        px={[4, 4, 0]}
+        justify='space-between'
+        px={[4, 4, 8, 12, 16]}
         py={4}
       >
 
@@ -53,7 +60,7 @@ const Header = () => {
             <Heading
               size={['lg', 'md', 'lg']}
             >
-              We<Text display='inline-block' color='#ff7d1a'>Kart</Text>
+              We<Text display='inline-block' color='orange.500'>Kart</Text>
             </Heading>
           </Link>
         </Flex>
