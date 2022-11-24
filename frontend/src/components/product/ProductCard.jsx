@@ -31,7 +31,7 @@ export const ProductCard = ({ product }) => {
                 <Image
                     borderRadius={6}
                     objectFit='cover'
-                    src='https://cdn.shopify.com/s/files/1/0752/6435/products/0E4A5019.jpg?v=1663827669'
+                    src={product.images[0].url}
                     alt={product.name}
                     width={['50rem', '16rem', '18.75rem', '21.875rem']}
                     height={56}
@@ -56,7 +56,7 @@ export const ProductCard = ({ product }) => {
                                 color='orange.500'
                                 fontWeight='bold'
                             >
-                                $15.00
+                                ${product.price}
                             </Text>
                         </Flex>
                         <Flex
@@ -74,14 +74,14 @@ export const ProductCard = ({ product }) => {
                                 py={1}
                             >
                                 <AiFillStar />
-                                <Text >4.5</Text>
+                                <Text >{product.rating}</Text>
                             </Flex>
                             <Text
                                 color='gray'
                                 fontSize={['sm', 'sm', 'md']}
                                 fontWeight='semibold'
                             >
-                                25 Reviews
+                                {product.numberOfReviews} Reviews
                             </Text>
                         </Flex>
                     </Flex>
