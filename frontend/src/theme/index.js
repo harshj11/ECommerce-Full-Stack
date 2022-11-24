@@ -1,8 +1,6 @@
 import { extendTheme, theme as base } from '@chakra-ui/react';
 import './styles.css';
 
-console.log(base.components.Button);
-
 const theme = extendTheme({
     "colors": {
         "orange": {
