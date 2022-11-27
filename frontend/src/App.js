@@ -5,9 +5,9 @@ import {
   Route
 } from 'react-router-dom';
 
-import Home from './components/layout/Home';
-import About from './components/layout/About';
-import Contact from './components/layout/Contact';
+import Home from './components/pages/Home';
+import About from './components/pages/About';
+import Contact from './components/pages/Contact';
 import Products from './components/product/Products';
 
 function App() {

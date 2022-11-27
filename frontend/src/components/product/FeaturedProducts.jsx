@@ -7,23 +7,32 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchProducts } from '../../features/products/productSlice';
 
+import Loading from '../layout/Loading';
+
 const FeaturedProducts = () => {
 
     const dispatch = useDispatch();
-    const { products } = useSelector(state => state.products);
+    const { products, loading } = useSelector(state => state.data);
 
     useEffect(() => {
         dispatch(fetchProducts());
     }, [dispatch]);
 
     return (
-        <Flex
-            justifyContent='space-evenly'
-            flexWrap='wrap'
-            p={0}
-        >
-            { products && products.map(product => <ProductCard key={ product._id } product={product} />) }
-        </Flex>
+        <>
+            {
+                loading ? <Loading />
+                    : (
+                        <Flex
+                            justifyContent='space-evenly'
+                            flexWrap='wrap'
+                            p={0}
+                        >
+                            {products && products.map(product => <ProductCard key={product._id} product={product} />)}
+                        </Flex>
+                    )
+            }
+        </>
     )
 }
 

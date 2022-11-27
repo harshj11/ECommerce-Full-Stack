@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { setErrors, clearErrors as clrErrors } from '../ui/uiSlice';
 
 import axios from 'axios';
 
@@ -8,7 +9,6 @@ export const productSlice = createSlice({
         loading: false,
         products: [],
         productsCount: 0,
-        errors: null
     },
     reducers: {
         loadingProducts: state => {
@@ -19,20 +19,6 @@ export const productSlice = createSlice({
                 loading: false,
                 products: payload.products,
                 productsCount: payload.productCount,
-                errors: null
-            }
-        },
-        setErrors: (state, { payload }) => {
-            return {
-                loading: false,
-                errors: payload
-            }
-        },
-        clearErrors: (state, { payload }) => {
-            return {
-                ...state, 
-                loading: false,
-                errors: null
             }
         }
     }
@@ -52,8 +38,8 @@ export const fetchProducts = () => {
 
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
-    dispatch(clearErrors());
+    dispatch(clrErrors());
 }
 
-export const { loadingProducts, setProducts, setErrors } = productSlice.actions;
+export const { loadingProducts, setProducts } = productSlice.actions;
 export default productSlice.reducer;
