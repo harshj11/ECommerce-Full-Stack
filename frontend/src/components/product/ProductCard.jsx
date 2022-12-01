@@ -10,11 +10,11 @@ import {
 
 import { Link } from 'react-router-dom';
 
-import { AiFillStar } from 'react-icons/ai';
+import ProductRating from './ProductRating';
 
 export const ProductCard = ({ product }) => {
     return (
-        <Link to={product._id}>
+        <Link to={`/product/${product._id}`}>
             <Flex
                 boxShadow='lg'
                 borderRadius={6}
@@ -63,19 +63,7 @@ export const ProductCard = ({ product }) => {
                             flexDir='column'
                             align='center'
                         >
-                            <Flex
-                                align='center'
-                                background='green'
-                                borderRadius={4}
-                                color='white'
-                                fontSize={['sm', 'sm', 'md']}
-                                fontWeight='bold'
-                                px={2}
-                                py={1}
-                            >
-                                <AiFillStar />
-                                <Text >{product.rating}</Text>
-                            </Flex>
+                            <ProductRating rating={product.rating} />
                             <Text
                                 color='gray'
                                 fontSize={['sm', 'sm', 'md']}

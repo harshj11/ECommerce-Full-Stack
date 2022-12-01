@@ -28,4 +28,4 @@ router.route("/reviews")
     .get(getProductReviews)
     .delete(isAuthenticatedUser, deleteProductReview);
 
-module.exports = router;``
+module.exports = router;

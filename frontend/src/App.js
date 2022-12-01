@@ -5,10 +5,11 @@ import {
   Route
 } from 'react-router-dom';
 
-import Home from './components/layout/Home';
-import About from './components/layout/About';
-import Contact from './components/layout/Contact';
+import Home from './components/pages/Home';
+import About from './components/pages/About';
+import Contact from './components/pages/Contact';
 import Products from './components/product/Products';
+import ProductDetails from './components/product/ProductDetails';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route exact path='/products' element={<Products />} />
         <Route exact path='/about' element={<About />} />
         <Route exact path='/contact' element={<Contact />} />
+        <Route exact path='/product/:id' element={<ProductDetails />} />
 
       </Routes>
     </Router>

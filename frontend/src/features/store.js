@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
+
 import productReducer from '../features/products/productSlice';
+import uiReducer from '../features/ui/uiSlice';
 
 export default configureStore({
     reducer: {
-        products: productReducer
+        data: productReducer,
+        ui: uiReducer
     }
 });
