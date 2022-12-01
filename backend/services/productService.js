@@ -47,7 +47,7 @@ class ProductService {
         
         let productsFindQuery = Product.find(), queryParameters = req.query;
 
-        const productsPerPage = 5;
+        const productsPerPage = 8;
         const productCount = await Product.countDocuments();
         /*
             Preparing the query accordingly, so as to search the product based on the keyword, filter the
@@ -235,7 +235,7 @@ class ProductService {
             product.numberOfReviews += 1;
         }
 
-        product.rating = avg / product.reviews.length;
+        product.rating = Math.round((avg / product.reviews.length) * 100) / 100;
         await product.save({ validateBeforeSave: false });
 
         res.status(200).json({
