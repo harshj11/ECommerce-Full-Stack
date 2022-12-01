@@ -18,7 +18,7 @@ const Home = () => {
                     size='lg'
                 >
                     Featured Products
-                    </Heading>
+                </Heading>
                 <Container
                     maxW='100vw'
                     py={4}

@@ -11,11 +11,9 @@ import store from './features/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
       <ChakraProvider theme={theme}>
         <App />
       </ChakraProvider>
     </Provider>
-  </React.StrictMode>
 );

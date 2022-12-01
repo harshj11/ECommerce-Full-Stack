@@ -1,24 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { setErrors, clearErrors as clrErrors } from '../ui/uiSlice';
+import { setLoading, setLoadedSuccessfully, setErrors, clearErrors as clrErrors } from '../ui/uiSlice';
 
 import axios from 'axios';
 
 export const productSlice = createSlice({
     name: 'products',
     initialState: {
-        loading: false,
         products: [],
         productsCount: 0,
+        product: {}
     },
     reducers: {
-        loadingProducts: state => {
-            state.loading = true;
-        },
         setProducts: (state, { payload }) => {
             return {
-                loading: false,
                 products: payload.products,
                 productsCount: payload.productCount,
+                product: state.product
+            }
+        }, 
+        setProduct: (state, { payload }) => {
+            return {
+                ...state,
+                loading: false,
+                product: payload
             }
         }
     }
@@ -27,9 +31,23 @@ export const productSlice = createSlice({
 export const fetchProducts = () => {
     return async (dispatch, getState) => {
         try {
-            dispatch(loadingProducts());
+            dispatch(setLoading());
             const { data } = await axios.get('/api/v1/products');
             dispatch(setProducts(data));
+            dispatch(setLoadedSuccessfully());
+        } catch(error) {
+            dispatch(setErrors(error.response.data));
+        }
+    }
+}
+
+export const fetchProductById = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(setLoading());
+            const { data } = await axios.get(`/api/v1/product/${id}`);
+            dispatch(setProduct(data.product));
+            dispatch(setLoadedSuccessfully());
         } catch(error) {
             dispatch(setErrors(error.response.data));
         }
@@ -41,5 +59,5 @@ export const clearErrors = () => async (dispatch) => {
     dispatch(clrErrors());
 }
 
-export const { loadingProducts, setProducts } = productSlice.actions;
+export const { loadingProducts, setProducts, setProduct } = productSlice.actions;
 export default productSlice.reducer;
