@@ -12,7 +12,10 @@ import Loading from '../layout/Loading';
 const FeaturedProducts = () => {
 
     const dispatch = useDispatch();
-    const { products, loading } = useSelector(state => state.data);
+    const { data, ui } = useSelector(state => state);
+
+    const { loading } = ui;
+    const { products } = data;
 
     useEffect(() => {
         dispatch(fetchProducts());

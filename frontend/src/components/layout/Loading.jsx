@@ -22,7 +22,10 @@ const Loading = () => {
             flexDir='column'
             align='center'
             mx='auto'
-            my={44}
+            position='absolute'
+            top='50vh'
+            left='50%'
+            transform='translateX(-50%)'
             width={20}
         >
             <Flex 
