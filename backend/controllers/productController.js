@@ -24,3 +24,6 @@ exports.getProductReviews = catchAsyncErrors(ProductService.getProductReviews);
 
 // Delete a review.
 exports.deleteProductReview = catchAsyncErrors(ProductService.deleteProductReview);
+
+// Get products by category.
+exports.getProductsByCategory = catchAsyncErrors(ProductService.getProductsByCategory);

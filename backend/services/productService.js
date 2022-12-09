@@ -19,6 +19,7 @@ class ProductService {
 
         // Setting the User object to track the user who has created the given product.
         req.body.user = req.user.id;
+        req.body.category = req.body.category.toUpperCase();
 
         /*
             Persist product in db, if any error occurs while saving, send appropriate response. The error
@@ -321,6 +322,27 @@ class ProductService {
         res.status(200).json({
             success: true,
             reviews
+        });
+    }
+
+    /**
+     * Get all products by specific category.
+     * 
+     * @param {HTTP} req 
+     * @param {HTTP} res 
+     * @param {function} next 
+     * 
+     * @return a success response if review deleted successfully or a failure response if product not found
+     * with the given product id or user is trying to delete some another person's review.
+     */
+    static getProductsByCategory = async (req, res, next) => {
+        const productsBasedOnCategory = await Product.find({ category: req.params.category.toUpperCase() });
+        if(!productsBasedOnCategory || productsBasedOnCategory.length === 0)
+            return next(new ErrorHandler(404, "Not Found!"));
+        
+            return res.status(200).json({
+            success: true,
+            products: productsBasedOnCategory
         });
     }
 }
