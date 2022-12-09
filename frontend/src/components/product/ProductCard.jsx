@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 import ProductRating from './ProductRating';
 
-export const ProductCard = ({ product }) => {
+const ProductCard = ({ product }) => {
     return (
         <Link to={`/product/${product._id}`}>
             <Flex
@@ -25,7 +25,7 @@ export const ProductCard = ({ product }) => {
                     transition: 'transform 100ms ease-in-out',
                 }}
                 transition='all 100ms ease-in-out'
-                m={4}
+                my={4}
             >
 
                 <Image
@@ -48,6 +48,7 @@ export const ProductCard = ({ product }) => {
                     >
                         <Flex
                             flexDir='column'
+                            maxWidth='10rem'
                         >
                             <Heading as='h3' size={['xs', 'sm', 'md']}>
                                 {product.name}
@@ -89,3 +90,5 @@ export const ProductCard = ({ product }) => {
         </Link>
     )
 }
+
+export default ProductCard;
