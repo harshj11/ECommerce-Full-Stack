@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React, { useEffect } from 'react'
 
-import { ProductCard } from './ProductCard';
+import ProductCard from './ProductCard';
 
 import { useDispatch, useSelector } from 'react-redux';
 
