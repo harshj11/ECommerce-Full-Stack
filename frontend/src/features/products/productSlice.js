@@ -7,6 +7,7 @@ export const productSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
+        productsByCategory: {},
         productsCount: 0,
         product: {}
     },
@@ -24,6 +25,17 @@ export const productSlice = createSlice({
                 loading: false,
                 product: payload
             }
+        },
+        setProductsByCategory: state => {
+            return {
+                ...state,
+                productsByCategory: state.products.reduce((group, product) => {
+                    const { category }  = product;
+                    group[category] = group[category] || [];
+                    group[category].push(product);
+                    return group;
+                }, {})
+            }
         }
     }
 });
@@ -34,6 +46,7 @@ export const fetchProducts = () => {
             dispatch(setLoading());
             const { data } = await axios.get('/api/v1/products');
             dispatch(setProducts(data));
+            dispatch(setProductsByCategory());
             dispatch(setLoadedSuccessfully());
         } catch(error) {
             dispatch(setErrors(error.response.data));
@@ -59,5 +72,5 @@ export const clearErrors = () => async (dispatch) => {
     dispatch(clrErrors());
 }
 
-export const { loadingProducts, setProducts, setProduct } = productSlice.actions;
+export const { loadingProducts, setProducts, setProduct, setProductsByCategory } = productSlice.actions;
 export default productSlice.reducer;
