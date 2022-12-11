@@ -30,7 +30,7 @@ const Header = () => {
       p={0} 
       pos='fixed'
       top={0}
-      zIndex={1}
+      zIndex={10}
     >
       <Flex 
         boxShadow='lg'

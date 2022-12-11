@@ -1,7 +1,7 @@
-import { Flex } from '@chakra-ui/react';
+import { Grid, GridItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react'
 
-import { ProductCard } from './ProductCard';
+import ProductCard from './ProductCard';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,7 +18,8 @@ const FeaturedProducts = () => {
     const { products } = data;
 
     useEffect(() => {
-        dispatch(fetchProducts());
+        if(!products || products.length === 0)
+            dispatch(fetchProducts());
     }, [dispatch]);
 
     return (
@@ -26,13 +27,18 @@ const FeaturedProducts = () => {
             {
                 loading ? <Loading />
                     : (
-                        <Flex
-                            justifyContent='space-evenly'
-                            flexWrap='wrap'
+                        <Grid
+                            gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)' ,'repeat(3, 1fr)']}
+                            gridRow='auto'
+                            gap={['1rem', '1rem', '2rem']}
                             p={0}
                         >
-                            {products && products.map(product => <ProductCard key={product._id} product={product} />)}
-                        </Flex>
+                            {products && products.map(product => 
+                                <GridItem key={product._id}>
+                                    <ProductCard product={product} />
+                                </GridItem>
+                            )}
+                        </Grid>
                     )
             }
         </>
