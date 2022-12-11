@@ -14,26 +14,30 @@ import ProductRating from './ProductRating';
 
 const ProductCard = ({ product }) => {
     return (
-        <Link to={`/product/${product._id}`}>
-            <Flex
-                boxShadow='lg'
-                borderRadius={6}
-                flexDir='column'
-                alignItems='flex-start'
-                _hover={{
-                    transform: 'scale(1.05)',
-                    transition: 'transform 100ms ease-in-out',
+        <Flex
+            boxShadow='lg'
+            borderRadius={6}
+            flexDir='column'
+            alignItems='flex-start'
+            _hover={{
+                transform: 'scale(1.05)',
+                transition: 'transform 100ms ease-in-out',
+            }}
+            transition='all 100ms ease-in-out'
+            my={4}
+        >
+            <Link 
+                to={`/product/${product._id}`}
+                style={{
+                    width: '100%'
                 }}
-                transition='all 100ms ease-in-out'
-                my={4}
             >
-
                 <Image
                     borderRadius={6}
                     objectFit='cover'
                     src={product.images[0].url}
                     alt={product.name}
-                    width={['50rem', '16rem', '18.75rem', '21.875rem']}
+                    width='100%'
                     height={56}
                 />
                 <Flex
@@ -76,18 +80,20 @@ const ProductCard = ({ product }) => {
                     </Flex>
                 </Flex>
 
-                <Button
-                    alignSelf='center'
-                    colorScheme='orange'
-                    my={4}
-                    size='md'
-                    w='80%'
-                >
-                    Add To Cart
-                </Button>
-            
-            </Flex>
-        </Link>
+            </Link>
+
+            <Button
+                alignSelf='center'
+                colorScheme='orange'
+                my={4}
+                size='md'
+                w='80%'
+                zIndex='inherit'
+            >
+                Add To Cart
+            </Button>
+
+        </Flex>
     )
 }
 
