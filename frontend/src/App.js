@@ -10,6 +10,7 @@ import About from './components/pages/About';
 import Contact from './components/pages/Contact';
 import Products from './components/product/Products';
 import ProductDetails from './components/product/ProductDetails';
+import ProductByCategory from './components/product/ProductByCategory';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route exact path='/about' element={<About />} />
         <Route exact path='/contact' element={<Contact />} />
         <Route exact path='/product/:id' element={<ProductDetails />} />
+        <Route exact path='/products/:category' element={<ProductByCategory />} />
 
       </Routes>
     </Router>

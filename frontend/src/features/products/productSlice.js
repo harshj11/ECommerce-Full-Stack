@@ -7,7 +7,7 @@ export const productSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
-        productsByCategory: {},
+        productsByCategory: null,
         productsCount: 0,
         product: {}
     },
@@ -26,12 +26,21 @@ export const productSlice = createSlice({
                 product: payload
             }
         },
-        setProductsByCategory: state => {
+        setProductsByCategory: (state, { payload }) => {
+            if(state.productsByCategory === null) {;
+                return {
+                    ...state,
+                    productsByCategory: {
+                        [payload[1]] : [...payload[0].products]
+                    }
+                }   
+            }
+
             return {
                 ...state,
                 productsByCategory: state.products.reduce((group, product) => {
                     const { category }  = product;
-                    group[category] = group[category] || [];
+                    group[category] = group[category] ?? [];
                     group[category].push(product);
                     return group;
                 }, {})
@@ -64,6 +73,20 @@ export const fetchProductById = (id) => {
         } catch(error) {
             dispatch(setErrors(error.response.data));
         }
+    }
+}
+
+export const fetchProductsByCategory = (category) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(setLoading());
+            const { data } = await axios.get(`/api/v1/products/${category}`);
+            dispatch(setProductsByCategory([data, category]));
+            dispatch(setLoadedSuccessfully());
+        } catch(error) {
+            dispatch(setErrors(error.response.data));
+        }
+
     }
 }
 

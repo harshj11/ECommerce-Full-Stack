@@ -22,7 +22,7 @@ const Products = () => {
     useEffect(() => {
         if(!products || products.length === 0)
             dispatch(fetchProducts());
-    }, [dispatch]);
+    }, [dispatch, products]);
 
     return (
         <>
@@ -80,7 +80,7 @@ const Products = () => {
                             {
                                 topCategoriesItems.map(category => (
                                     <Box key={category.id + 'p'}>
-                                        <CategoryHeader displayText={category.name} />
+                                        <CategoryHeader displayText={category.name} path={category.linkTo} />
 
                                         <Grid
                                             gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
@@ -89,8 +89,9 @@ const Products = () => {
                                             p={0}
                                         >
                                             {
-                                                productsByCategory[category.name.toUpperCase()] 
-                                                    && productsByCategory[category.name.toUpperCase()].slice(0, 3).map(product =>
+                                                productsByCategory && 
+                                                    productsByCategory[category.name.toUpperCase()] && 
+                                                        productsByCategory[category.name.toUpperCase()].slice(0, 3).map(product =>
                                                 <GridItem key={product._id}>
                                                     <ProductCard product={product} />
                                                 </GridItem>
