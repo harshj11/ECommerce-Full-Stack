@@ -1,11 +1,12 @@
-import { Grid, GridItem } from '@chakra-ui/react';
 import React, { useEffect } from 'react'
+import { Grid, GridItem } from '@chakra-ui/react';
 
 import ProductCard from './ProductCard';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchProducts } from '../../features/products/productSlice';
+import { clearErrors } from '../../features/ui/uiSlice';
 
 import Loading from '../layout/Loading';
 
@@ -18,9 +19,10 @@ const FeaturedProducts = () => {
     const { products } = data;
 
     useEffect(() => {
+        dispatch(clearErrors());
         if(!products || products.length === 0)
             dispatch(fetchProducts());
-    }, [dispatch]);
+    }, [dispatch, products]);
 
     return (
         <>
