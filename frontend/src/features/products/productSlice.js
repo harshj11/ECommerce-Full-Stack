@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { setLoading, setLoadedSuccessfully, setErrors, clearErrors as clrErrors } from '../ui/uiSlice';
+import { setLoading, setLoadedSuccessfully, setErrors, clearErrors } from '../ui/uiSlice';
 
 import axios from 'axios';
 
@@ -56,9 +56,14 @@ export const fetchProducts = () => {
             const { data } = await axios.get('/api/v1/products');
             dispatch(setProducts(data));
             dispatch(setProductsByCategory());
+            dispatch(clearErrors());
             dispatch(setLoadedSuccessfully());
         } catch(error) {
-            dispatch(setErrors(error.response.data));
+            dispatch(setErrors({
+                data: error.response.data,
+                statusCode: error.response.status,
+                statusText: error.response.statusText
+            }));
         }
     }
 }
@@ -69,9 +74,14 @@ export const fetchProductById = (id) => {
             dispatch(setLoading());
             const { data } = await axios.get(`/api/v1/product/${id}`);
             dispatch(setProduct(data.product));
+            dispatch(clearErrors());
             dispatch(setLoadedSuccessfully());
         } catch(error) {
-            dispatch(setErrors(error.response.data));
+            dispatch(setErrors({
+                data: error.response.data,
+                statusCode: error.response.status,
+                statusText: error.response.statusText
+            }));
         }
     }
 }
@@ -82,17 +92,17 @@ export const fetchProductsByCategory = (category) => {
             dispatch(setLoading());
             const { data } = await axios.get(`/api/v1/products/${category}`);
             dispatch(setProductsByCategory([data, category]));
+            dispatch(clearErrors());
             dispatch(setLoadedSuccessfully());
         } catch(error) {
-            dispatch(setErrors(error.response.data));
+            dispatch(setErrors({
+                data: error.response.data,
+                statusCode: error.response.status,
+                statusText: error.response.statusText
+            }));
         }
 
     }
-}
-
-// Clearing Errors
-export const clearErrors = () => async (dispatch) => {
-    dispatch(clrErrors());
 }
 
 export const { loadingProducts, setProducts, setProduct, setProductsByCategory } = productSlice.actions;
