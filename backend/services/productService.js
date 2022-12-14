@@ -95,7 +95,7 @@ class ProductService {
     
         // If product not found return product not found response.
         if(!product)
-            return next(new ErrorHandler(404, "The requested resource was not found!"));
+            return next(new ErrorHandler(404, `Product with id ${productId} not found!`));
         
         // Otherwise return success response.
         return res.status(200).json({
@@ -126,7 +126,7 @@ class ProductService {
         
         // If not available return 404 status.
         if(!productToUpdate)
-            return next(new ErrorHandler(404, "The requested resource was not found!"));
+            return next(new ErrorHandler(404, `Product with id ${productId} not found!`));
     
         // Otherwise, update the product.
         productToUpdate = await Product.findByIdAndUpdate(productId, req.body, {
@@ -165,7 +165,7 @@ class ProductService {
     
         // If not available return 404 status.
         if(!productToDelete)
-            return next(new ErrorHandler(404, "The requested resource was not found!"));
+            return next(new ErrorHandler(404, `Product with id ${productId} not found!`));
     
         // Otherwise delete the product.
         productToDelete = await Product.findByIdAndDelete(productId);
@@ -337,13 +337,13 @@ class ProductService {
      */
     static getProductsByCategory = async (req, res, next) => {
         const productsBasedOnCategory = await Product.find({ category: req.params.category.toUpperCase() });
-        if(!productsBasedOnCategory || productsBasedOnCategory.length === 0)
-            return next(new ErrorHandler(404, "Not Found!"));
+        if(!productsBasedOnCategory)
+            return next(new ErrorHandler(404, `No ${productsBasedOnCategory} available!`));
         
             return res.status(200).json({
-            success: true,
-            products: productsBasedOnCategory
-        });
+                success: true,
+                products: productsBasedOnCategory
+            });
     }
 }
 
