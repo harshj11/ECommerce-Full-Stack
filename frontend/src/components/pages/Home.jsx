@@ -26,27 +26,21 @@ const Home = () => {
                     errorText={(errors.statusCode === 500) ? errors.statusText + ', Please refresh or try again later' : errors.data.message}
                 />
                 : (
-                    <Container
-                        maxW='100vw'
-                        px={[4, 4, 8, 12, 16]}
-                        py={6}
+                    <VStack mt={24}
+                        px={[4, 4, 8, 12]}
                     >
-                        <VStack mt={24}>
-                            <Heading
-                                as='h2'
-                                size='lg'
-                            >
-                                Featured Products
-                            </Heading>
-                            <Container
-                                maxW='100vw'
-                                py={4}
-                            >
-                                <FeaturedProducts />
-                            </Container>
-
-                        </VStack>
-                    </Container>
+                        <Heading
+                            as='h2'
+                            size='lg'
+                        >
+                            Featured Products
+                        </Heading>
+                        <Container
+                            maxW='100vw'
+                        >
+                            <FeaturedProducts />
+                        </Container>
+                    </VStack>
                 )
 
         }
