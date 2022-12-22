@@ -1,9 +1,12 @@
 import {
     Box,
+    Button,
     Container,
     Flex,
+    Heading,
     IconButton,
-    Link
+    Link,
+    Text
 } from '@chakra-ui/react';
 
 import { Link as RouterLink } from 'react-router-dom';
@@ -11,6 +14,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { MdClose } from 'react-icons/md';
 
 import { links } from '../../utils/Links';
+
+import CartLink from './cart/CartLink';
 
 const Sidebar = ({ display, setDisplayFunc }) => {
 
@@ -36,26 +41,48 @@ const Sidebar = ({ display, setDisplayFunc }) => {
                 <Flex
                     background='white'
                     h='100vh'
-                    w={40}
+                    w={[44, 60]}
                     flexDir='column'
                     align='flex-start'
                     position='absolute'
                     left={0}
                     zIndex={2}
                 >
-                    <IconButton
-                        alignSelf='flex-end'
-                        background='none'
-                        boxShadow='none'
-                        _hover={{ background: 'none' }}
-                        icon={<MdClose />}
-                        size='lg'
-                        onClick={() => setDisplayFunc('none')}
-                    />
+
+                    <Flex
+                        justify='space-between'
+                        align='center'
+                        pt='4'
+                        px='4'
+                        w='100%'
+                    >
+                        <Link
+                            as={RouterLink}
+                            _hover={{ borderBottom: 'none' }}
+                            onClick={() => setDisplayFunc('none')}
+                            to='/'
+                        >
+                            <Heading
+                                size={['lg', 'md', 'lg']}
+                            >
+                                We<Text display='inline-block' color='orange.500'>Kart</Text>
+                            </Heading>
+                        </Link>
+
+                        <IconButton
+                            background='none'
+                            boxShadow='none'
+                            _hover={{ background: 'none' }}
+                            icon={<MdClose />}
+                            size='lg'
+                            onClick={() => setDisplayFunc('none')}
+                        />
+                    </Flex>
 
                     <Flex
                         flexDir='column'
-                        pl={4}
+                        px={4}
+                        w='100%'
                     >
                         {
                             links.map((link, index) =>
@@ -73,6 +100,30 @@ const Sidebar = ({ display, setDisplayFunc }) => {
                                 </Link>
                             )
                         }
+                    </Flex>
+
+                    <Flex
+                        px={['4', '0', '0']}
+                    >
+                        
+                    </Flex>
+
+                    <Flex
+                        direction='column'
+                        justify='space-around'
+                        mt='2'
+                        px={['4', '0', '0']}
+                        w={['auto', '100%', '100%']}
+                    >
+                        <CartLink display={['inline-block', 'none']} onClick={() => setDisplayFunc('none')} />
+                        <Button
+                            colorScheme='orange'
+                            mt={['4', '0', '0']}
+                            mx={[0, '4']}
+                            size={['sm', 'md', 'lg']}
+                        >
+                            Signup
+                        </Button>
                     </Flex>
                 </Flex>
             </Container>
