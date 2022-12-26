@@ -13,7 +13,6 @@ import Loading from '../layout/Loading';
 import ErrorPage from '../layout/ErrorPage';
 
 import { fetchProductsByCategory } from '../../features/products/productSlice';
-import { clearErrors } from '../../features/ui/uiSlice';
 
 const ProductByCategory = () => {
 
@@ -23,7 +22,6 @@ const ProductByCategory = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(clearErrors());
         dispatch(fetchProductsByCategory(category));
     }, [dispatch, category]);
 
