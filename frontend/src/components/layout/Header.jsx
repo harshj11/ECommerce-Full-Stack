@@ -5,14 +5,13 @@ import {
     Container,
     Flex,
     Heading,
-    Image,
     Link,
     Text,
     IconButton,
     Input
 } from '@chakra-ui/react';
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import { FiMenu, FiSearch } from 'react-icons/fi';
 
@@ -21,7 +20,19 @@ import CartLink from './cart/CartLink';
 
 const Header = () => {
 
+    const navigate = useNavigate();
+
     const [display, setDisplay] = useState('none');
+    const [keyword, setKeyword] = useState('');
+
+    const searchProductsByKeyword = (e) => {
+        e.preventDefault();
+        let trimmedKeyword = keyword.trim();
+        if(trimmedKeyword)
+            navigate(`/search/${trimmedKeyword}`);
+        else
+            navigate('/products');
+    }
 
     return (
         <Container
@@ -70,23 +81,29 @@ const Header = () => {
                     position='relative'
                     mr='3rem'
                 >
-                    <Input
-                        borderRadius='0'
-                        p='2'
-                        w={['5.5rem', '9rem', '20rem']}
-                        _focus={{
-                            border: 'none',
-                            outline: 'none'
-                        }}
-                    />
-                    <IconButton
-                        borderTopStartRadius='0'
-                        borderBottomStartRadius='0'
-                        colorScheme='orange'
-                        icon={<FiSearch />}
-                        position='absolute'
-                        left='100%'
-                    />
+                    <form onSubmit={searchProductsByKeyword}>
+                        <Input
+                            borderRadius='0'
+                            onChange={(e) => setKeyword(e.target.value)}
+                            p='2'
+                            placeholder='Search a Product'
+                            value={keyword}
+                            w={['5.5rem', '9rem', '20rem']}
+                            _focus={{
+                                border: 'none',
+                                outline: 'none'
+                            }}
+                        />
+                        <IconButton
+                            borderTopStartRadius='0'
+                            borderBottomStartRadius='0'
+                            colorScheme='orange'
+                            icon={<FiSearch />}
+                            type='submit'
+                            position='absolute'
+                            left='100%'
+                        />
+                    </form>
                 </Flex>
 
                 <Flex

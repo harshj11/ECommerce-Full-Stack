@@ -19,9 +19,8 @@ export const uiSlice = createSlice({
                 errors: payload
             }
         },
-        clearErrors: (state, { payload }) => {
+        clearErrors: (state) => {
             return {
-                ...state, 
                 loading: false,
                 errors: null
             }

@@ -49,11 +49,11 @@ export const productSlice = createSlice({
     }
 });
 
-export const fetchProducts = () => {
+export const fetchProducts = (keyword = '') => {
     return async (dispatch, getState) => {
         try {
             dispatch(setLoading());
-            const { data } = await axios.get('/api/v1/products');
+            const { data } = await axios.get(`/api/v1/products?keyword=${keyword}`);
             dispatch(setProducts(data));
             dispatch(setProductsByCategory());
             dispatch(clearErrors());

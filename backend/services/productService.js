@@ -49,7 +49,7 @@ class ProductService {
         let productsFindQuery = Product.find(), queryParameters = req.query;
 
         const productsPerPage = 8;
-        const productCount = await Product.countDocuments();
+        let productCount = 0;
         /*
             Preparing the query accordingly, so as to search the product based on the keyword, filter the
             products, showing the products for the corresponding page number.
@@ -65,7 +65,8 @@ class ProductService {
             response. The error handling would be done at the place wherever this function would actually be called.
         */
         const products = await apiFeatures.query;
-        
+        productCount = products.length;
+
         // Otherwise return success response.
         return res.status(200).json({
             success: true,

@@ -12,6 +12,7 @@ import Products from './components/product/Products';
 import ProductDetails from './components/product/ProductDetails';
 import ProductByCategory from './components/product/ProductByCategory';
 import ErrorPage from './components/layout/ErrorPage';
+import SearchProducts from './components/product/SearchProducts';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                 <Route exact path='/contact' element={<Contact />} />
                 <Route exact path='/product/:id' element={<ProductDetails />} />
                 <Route exact path='/products/:category' element={<ProductByCategory />} />
+                <Route exact path='/search/:keyword' element={<SearchProducts />} />
 
             </Routes>
         </Router>

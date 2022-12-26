@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
     Button,
@@ -11,8 +11,12 @@ import {
 import { Link } from 'react-router-dom';
 
 import ProductRating from './ProductRating';
+import ItemCounter from '../layout/cart/ItemCounter';
 
 const ProductCard = ({ product }) => {
+
+    const [noOfItems, setNoOfItems] = useState(0);
+
     return (
         <Flex
             boxShadow='lg'
@@ -82,16 +86,25 @@ const ProductCard = ({ product }) => {
 
             </Link>
 
-            <Button
+            <Flex
                 alignSelf='center'
-                colorScheme='orange'
-                my={4}
-                size='md'
-                w='80%'
-                zIndex='inherit'
+                flexDir={['column', 'column', 'row']}
+                mx={['auto', 'auto', 0]}
+                mb={4}
             >
-                Add To Cart
-            </Button>
+                <ItemCounter width={['10rem', '7rem']} noOfItems={noOfItems} setNoOfItems={setNoOfItems} />
+                <Button
+                    colorScheme='orange'
+                    height='3rem'
+                    fontSize='1rem'
+                    mt={['1rem', '1rem', 0]}
+                    ml={[0, 0, '1rem']}
+                    width={['10rem', '7rem']}
+                >
+                    Add To Cart
+                </Button>
+
+            </Flex>
 
         </Flex>
     )
