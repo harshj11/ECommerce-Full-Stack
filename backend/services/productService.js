@@ -49,7 +49,7 @@ class ProductService {
         let productsFindQuery = Product.find(), queryParameters = req.query;
 
         const productsPerPage = 8;
-        let productCount = 0;
+        const productCount = await Product.countDocuments();
         /*
             Preparing the query accordingly, so as to search the product based on the keyword, filter the
             products, showing the products for the corresponding page number.
@@ -65,7 +65,6 @@ class ProductService {
             response. The error handling would be done at the place wherever this function would actually be called.
         */
         const products = await apiFeatures.query;
-        productCount = products.length;
 
         // Otherwise return success response.
         return res.status(200).json({
@@ -337,14 +336,34 @@ class ProductService {
      * with the given product id or user is trying to delete some another person's review.
      */
     static getProductsByCategory = async (req, res, next) => {
-        const productsBasedOnCategory = await Product.find({ category: req.params.category.toUpperCase() });
+        let productsBasedOnCategory = Product.find({ category: req.params.category.toUpperCase() }), queryParameters = req.query;
+        const productsPerPage = 8;
+
+        const productsCount = await Product.find({ category: req.params.category.toUpperCase() }).count();
+        /*
+            Preparing the query accordingly, so as to search the product based on the keyword, filter the
+            products, showing the products for the corresponding page number.
+        */
+        const apiFeatures = new ApiFeatures(productsBasedOnCategory, queryParameters)
+        .search()
+        .filter()
+        .pagination(productsPerPage);
+
+        /*
+            Get all products from db / the products based on the keyword / the products based on the filter / the
+            number of products based on the page number, if any error occurs while retrieving, send appropriate 
+            response. The error handling would be done at the place wherever this function would actually be called.
+        */
+        productsBasedOnCategory = await apiFeatures.query;
+
         if(!productsBasedOnCategory)
             return next(new ErrorHandler(404, `No ${productsBasedOnCategory} available!`));
-        
-            return res.status(200).json({
-                success: true,
-                products: productsBasedOnCategory
-            });
+
+        return res.status(200).json({
+            success: true,
+            products: productsBasedOnCategory,
+            productsCount: productsCount
+        });
     }
 }
 

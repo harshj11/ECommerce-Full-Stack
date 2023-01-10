@@ -1,0 +1,38 @@
+.page-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style-type: none;
+}
+
+.page-item {
+    border: solid 1px #FF7D1A;
+    border-radius: 6px;
+    font-weight: bold;
+    padding: 0.5rem;
+}
+
+.page-item:hover {
+    background-color: #FF7D1A;
+    color: white;
+    cursor: pointer;
+}
+
+.page-link {
+    padding: 0.5rem;
+}
+
+.active {
+    background-color: #FF7D1A;
+    color: white;
+}
+
+@media screen and (max-width: 478px){
+    .page-link {
+        padding: 0.25rem;
+    }
+
+    .page-item {
+        padding: 0.25rem;
+    }
+}
