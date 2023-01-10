@@ -1,6 +1,6 @@
 import { Button, Heading, Flex, Image, Text, Box } from '@chakra-ui/react';
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,13 +10,11 @@ import { clearErrors } from '../../features/ui/uiSlice';
 
 import Loading from '../layout/Loading';
 
-import iconPlus from '../../images/icon-plus.svg';
-import iconMinus from '../../images/icon-minus.svg';
-
 import ProductReviewCard from './ProductReviewCard';
 import ProductRating from './ProductRating';
 
 import ErrorPage from '../layout/ErrorPage';
+import ItemCounter from '../layout/cart/ItemCounter';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -26,6 +24,8 @@ const ProductDetails = () => {
         dispatch(clearErrors());
         dispatch(fetchProductById(id));
     }, [id, dispatch]);
+
+    const [noOfItems, setNoOfItems] = useState(0);
 
     const { ui, data } = useSelector(state => state);
     const { errors } = ui;
@@ -141,47 +141,12 @@ const ProductDetails = () => {
                                                 mx={['auto', 'auto', 0]}
                                                 my={8}
                                             >
-                                                <Flex
-                                                    bgColor='#f7f8fd'
-                                                    borderRadius={6}
-                                                    align='center'
-                                                    justify='space-between'
-                                                    height='3rem'
-                                                    width={['10rem', '23rem', '8rem']}
-                                                >
-                                                    <Button
-                                                        borderRadius='none'
-                                                        bg='none'
-                                                        boxShadow='none'
-                                                        height='100%'
-                                                        _hover={{ bg: 'none' }}
-                                                    >
-                                                        <Image
-                                                            src={iconMinus}
-                                                        />
-                                                    </Button>
-                                                    <Flex
-                                                        as='span'
-                                                        fontWeight='bold'
-                                                        height='100%'
-                                                        justify='center'
-                                                        align='center'
-                                                    >
-                                                        0
-                                                    </Flex>
-                                                    <Button
-                                                        bg='none'
-                                                        borderRadius='none'
-                                                        boxShadow='none'
-                                                        height='100%'
-                                                        _hover={{ bg: 'none' }}
-                                                    >
-                                                        <Image
-                                                            src={iconPlus}
-                                                        />
-                                                    </Button>
-                                                </Flex>
-
+                                                <ItemCounter 
+                                                    width={['10rem', '23rem', '8rem']} 
+                                                    noOfItems={noOfItems}
+                                                    setNoOfItems={setNoOfItems}
+                                                />
+                                                
                                                 <Button
                                                     colorScheme='orange'
                                                     height='3rem'

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Container, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Container, Grid, GridItem } from '@chakra-ui/react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,7 +13,8 @@ import Loading from '../layout/Loading';
 import ErrorPage from '../layout/ErrorPage';
 
 import { fetchProductsByCategory } from '../../features/products/productSlice';
-import { clearErrors } from '../../features/ui/uiSlice';
+
+import Pagination from '../layout/pagination/Pagination';
 
 const ProductByCategory = () => {
 
@@ -23,7 +24,6 @@ const ProductByCategory = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(clearErrors());
         dispatch(fetchProductsByCategory(category));
     }, [dispatch, category]);
 
@@ -32,6 +32,13 @@ const ProductByCategory = () => {
     const { errors, loading } = ui;
 
     const products = productsByCategory && productsByCategory[category];
+    const numberOfProducts = productsByCategory && productsByCategory[category + ' COUNT'];
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const handleChange = (data) => {
+        dispatch(fetchProductsByCategory(category, data.selected + 1));
+        setCurrentPage(data.selected);
+    }
 
     return (
         loading ? <Loading /> 
@@ -63,6 +70,18 @@ const ProductByCategory = () => {
                                 )
                             }
                         </Grid>
+                        <Box
+                            fontSize={['sm']}
+                            my={4}
+                            mx='auto'
+                            width={['100%', '28rem', '30rem']}
+                        >
+                            <Pagination
+                                currentPage={currentPage}
+                                numberOfProducts={numberOfProducts}
+                                handleChange={handleChange}
+                            /> 
+                        </Box>
                     </Container>
                 )
     )

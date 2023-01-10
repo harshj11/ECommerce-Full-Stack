@@ -9,8 +9,7 @@ import Loading from '../layout/Loading';
 
 import { topCategoriesItems } from '../../utils/TopCategories';
 
-import { fetchProducts } from '../../features/products/productSlice';
-import { clearErrors } from '../../features/ui/uiSlice';
+import { fetchProducts, fetchProductsByCategory } from '../../features/products/productSlice';
 
 import ProductCard from './ProductCard';
 
@@ -22,24 +21,26 @@ const Products = () => {
 
     const { data, ui } = useSelector(state => state);
     const { errors, loading } = ui;
-    const { products, productsByCategory } = data;
+    const { productsByCategory } = data;
 
     useEffect(() => {
-        dispatch(clearErrors());
-        if(!products || products.length === 0)
-            dispatch(fetchProducts());
-    }, [dispatch, products]);
+        dispatch(fetchProducts());
+        topCategoriesItems.forEach(category => {
+            dispatch(fetchProductsByCategory(category.name.toUpperCase()));
+        })
+    }, [dispatch]);
 
     return (
         <>
             {
-                loading ? <Loading /> 
+                errors ? 
+                    <ErrorPage 
+                        errorCode={errors.statusCode} 
+                        errorText={(errors.statusCode === 500) ? errors.statusText + ', Please refresh or try again later' : errors.data.message}
+                    />
                     : ( 
-                        errors ? 
-                            <ErrorPage 
-                                errorCode={errors.statusCode} 
-                                errorText={(errors.statusCode === 500) ? errors.statusText + ', Please refresh or try again later' : errors.data.message}
-                            /> : 
+                        loading ? 
+                            <Loading /> : 
                             <Container
                                 maxW='100vw'
                                 px={[4, 4, 8, 12, 16]}

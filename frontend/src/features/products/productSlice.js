@@ -27,35 +27,25 @@ export const productSlice = createSlice({
             }
         },
         setProductsByCategory: (state, { payload }) => {
-            if(state.productsByCategory === null) {;
-                return {
-                    ...state,
-                    productsByCategory: {
-                        [payload[1]] : [...payload[0].products]
-                    }
-                }   
-            }
-
             return {
                 ...state,
-                productsByCategory: state.products.reduce((group, product) => {
-                    const { category }  = product;
-                    group[category] = group[category] ?? [];
-                    group[category].push(product);
-                    return group;
-                }, {})
+                productsByCategory: {
+                    ...state.productsByCategory,
+                    [payload[1]] : [...payload[0].products],
+                    [payload[1] + ' COUNT']: payload[0].productsCount
+                },
+                productsCount: payload.productCount
             }
         }
     }
 });
 
-export const fetchProducts = () => {
+export const fetchProducts = (keyword = '', page = '1') => {
     return async (dispatch, getState) => {
         try {
             dispatch(setLoading());
-            const { data } = await axios.get('/api/v1/products');
+            const { data } = await axios.get(`/api/v1/products?keyword=${keyword}&page=${page}`);
             dispatch(setProducts(data));
-            dispatch(setProductsByCategory());
             dispatch(clearErrors());
             dispatch(setLoadedSuccessfully());
         } catch(error) {
@@ -86,11 +76,11 @@ export const fetchProductById = (id) => {
     }
 }
 
-export const fetchProductsByCategory = (category) => {
+export const fetchProductsByCategory = (category, page='1') => {
     return async (dispatch, getState) => {
         try {
             dispatch(setLoading());
-            const { data } = await axios.get(`/api/v1/products/${category}`);
+            const { data } = await axios.get(`/api/v1/products/${category}?page=${page}`);
             dispatch(setProductsByCategory([data, category]));
             dispatch(clearErrors());
             dispatch(setLoadedSuccessfully());
