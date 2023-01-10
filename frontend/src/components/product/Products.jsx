@@ -9,7 +9,7 @@ import Loading from '../layout/Loading';
 
 import { topCategoriesItems } from '../../utils/TopCategories';
 
-import { fetchProducts } from '../../features/products/productSlice';
+import { fetchProducts, fetchProductsByCategory } from '../../features/products/productSlice';
 
 import ProductCard from './ProductCard';
 
@@ -25,6 +25,9 @@ const Products = () => {
 
     useEffect(() => {
         dispatch(fetchProducts());
+        topCategoriesItems.forEach(category => {
+            dispatch(fetchProductsByCategory(category.name.toUpperCase()));
+        })
     }, [dispatch]);
 
     return (
