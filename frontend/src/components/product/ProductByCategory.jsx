@@ -34,6 +34,7 @@ const ProductByCategory = () => {
     const products = productsByCategory && productsByCategory[category];
     const numberOfProducts = productsByCategory && productsByCategory[category + ' COUNT'];
     const [currentPage, setCurrentPage] = useState(0);
+    const productsPerPage = 8;
 
     const handleChange = (data) => {
         dispatch(fetchProductsByCategory(category, data.selected + 1));
@@ -70,18 +71,22 @@ const ProductByCategory = () => {
                                 )
                             }
                         </Grid>
-                        <Box
-                            fontSize={['sm']}
-                            my={4}
-                            mx='auto'
-                            width={['100%', '28rem', '30rem']}
-                        >
-                            <Pagination
-                                currentPage={currentPage}
-                                numberOfProducts={numberOfProducts}
-                                handleChange={handleChange}
-                            /> 
-                        </Box>
+                        {
+                            numberOfProducts > productsPerPage ? 
+                                <Box
+                                    fontSize={['sm']}
+                                    my={4}
+                                    mx='auto'
+                                    width={['100%', '28rem', '30rem']}
+                                >
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        numberOfProducts={numberOfProducts}
+                                        handleChange={handleChange}
+                                    />
+                                </Box>
+                            : null
+                        }
                     </Container>
                 )
     )
