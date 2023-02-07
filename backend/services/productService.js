@@ -344,10 +344,13 @@ class ProductService {
             Preparing the query accordingly, so as to search the product based on the keyword, filter the
             products, showing the products for the corresponding page number.
         */
-        const apiFeatures = new ApiFeatures(productsBasedOnCategory, queryParameters)
+        let apiFeatures = new ApiFeatures(productsBasedOnCategory, queryParameters)
         .search()
         .filter()
-        .pagination(productsPerPage);
+
+        const filteredProducts = await apiFeatures.query.clone().exec();
+
+        apiFeatures = apiFeatures.pagination(productsPerPage);
 
         /*
             Get all products from db / the products based on the keyword / the products based on the filter / the
@@ -362,7 +365,8 @@ class ProductService {
         return res.status(200).json({
             success: true,
             products: productsBasedOnCategory,
-            productsCount: productsCount
+            productsCount: productsCount,
+            filteredProductsCount: filteredProducts.length,
         });
     }
 }
