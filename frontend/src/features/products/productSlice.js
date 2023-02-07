@@ -32,9 +32,10 @@ export const productSlice = createSlice({
                 productsByCategory: {
                     ...state.productsByCategory,
                     [payload[1]] : [...payload[0].products],
-                    [payload[1] + ' COUNT']: payload[0].productsCount
+                    [payload[1] + ' COUNT']: payload[0].productsCount,
+                    [payload[1] + 'FILTERED COUNT']: payload[0].filteredProductsCount,
                 },
-                productsCount: payload.productCount
+                productsCount: payload.productCount,
             }
         }
     }
@@ -76,11 +77,12 @@ export const fetchProductById = (id) => {
     }
 }
 
-export const fetchProductsByCategory = (category, page='1') => {
+export const fetchProductsByCategory = (category, page='1', prices=[0, 100000], rating=0) => {
     return async (dispatch, getState) => {
         try {
             dispatch(setLoading());
-            const { data } = await axios.get(`/api/v1/products/${category}?page=${page}`);
+            const link = `/api/v1/products/${category}?page=${page}&price[gte]=${prices[0]}&price[lt]=${prices[1]}&rating[gte]=${rating}`
+            const { data } = await axios.get(link);
             dispatch(setProductsByCategory([data, category]));
             dispatch(clearErrors());
             dispatch(setLoadedSuccessfully());
