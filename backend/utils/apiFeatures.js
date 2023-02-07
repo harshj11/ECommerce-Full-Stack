@@ -8,7 +8,11 @@ class ApiFeatures {
     constructor(query, queryParameters) {
         this.query = query;
         this.queryParameters = queryParameters;
+        // this.queryCopy = Product.find({ category: req.params.category.toUpperCase() });
+        // this.filteredProductsCount = 0;
     }
+
+    // getQueryCopy = () => this.queryCopy;
 
     /**
      * A method to prepare the query object based on the keyword paramter provided in the
@@ -25,6 +29,7 @@ class ApiFeatures {
         } : {}
 
         this.query = this.query.find({ ...keyword });
+        // this.queryCopy = this.queryCopy.find({ ...keyword });
         return this;
     }
 
@@ -46,6 +51,8 @@ class ApiFeatures {
         queryParametersString = queryParametersString.replace(/\b(gt|gte|lt|lte)\b/g, key => `$${key}`);
 
         this.query = this.query.find(JSON.parse(queryParametersString));
+        // this.queryCopy = this.queryCopy.find(JSON.parse(queryParametersString));
+
         return this;
     }
 

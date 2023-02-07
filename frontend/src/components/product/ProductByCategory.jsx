@@ -16,6 +16,8 @@ import { fetchProductsByCategory } from '../../features/products/productSlice';
 
 import Pagination from '../layout/pagination/Pagination';
 
+import Filter from '../layout/Filter';
+
 const ProductByCategory = () => {
 
     let { category } = useParams();
@@ -24,6 +26,7 @@ const ProductByCategory = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        console.log("called");
         dispatch(fetchProductsByCategory(category));
     }, [dispatch, category]);
 
@@ -33,11 +36,27 @@ const ProductByCategory = () => {
 
     const products = productsByCategory && productsByCategory[category];
     const numberOfProducts = productsByCategory && productsByCategory[category + ' COUNT'];
+    const filteredProductsCount = productsByCategory && productsByCategory[category + 'FILTERED COUNT'];
+    
     const [currentPage, setCurrentPage] = useState(0);
+    const productsPerPage = 8;
+
+    const [filterValues, setFilterValues] = useState({
+        priceRange: null,
+        rating: null,
+    });
 
     const handleChange = (data) => {
-        dispatch(fetchProductsByCategory(category, data.selected + 1));
+        dispatch(fetchProductsByCategory(category, data.selected + 1, filterValues.priceRange, filterValues.rating));
         setCurrentPage(data.selected);
+    }
+
+    const handleFilter = (priceRange, ratingValue) => {
+        setFilterValues(prev => ({
+            priceRange: priceRange,
+            rating: ratingValue,
+        }));
+        dispatch(fetchProductsByCategory(category, 1, priceRange, ratingValue));
     }
 
     return (
@@ -54,6 +73,15 @@ const ProductByCategory = () => {
                         px={[4, 4, 8, 12, 16]}
                         py={[0, 2]}
                     >
+                        <Box
+                            mx={[4, 4, 8, 12, 16]}
+                            position='fixed'
+                            top='10.5rem'
+                            right='0'
+                            zIndex={100}
+                        >
+                            <Filter handleFilter={handleFilter} />
+                        </Box>
                         <CategoryHeader displayText={category} />
 
                         <Grid
@@ -70,18 +98,22 @@ const ProductByCategory = () => {
                                 )
                             }
                         </Grid>
-                        <Box
-                            fontSize={['sm']}
-                            my={4}
-                            mx='auto'
-                            width={['100%', '28rem', '30rem']}
-                        >
-                            <Pagination
-                                currentPage={currentPage}
-                                numberOfProducts={numberOfProducts}
-                                handleChange={handleChange}
-                            /> 
-                        </Box>
+                        {
+                            ((filterValues.priceRange || filterValues.rating) ? filteredProductsCount  : numberOfProducts) > productsPerPage ? 
+                                <Box
+                                    fontSize={['sm']}
+                                    my={4}
+                                    mx='auto'
+                                    width={['100%', '28rem', '30rem']}
+                                >
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        numberOfProducts={numberOfProducts}
+                                        handleChange={handleChange}
+                                    />
+                                </Box>
+                            : null
+                        }
                     </Container>
                 )
     )
