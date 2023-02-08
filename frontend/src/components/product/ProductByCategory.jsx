@@ -26,7 +26,6 @@ const ProductByCategory = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("called");
         dispatch(fetchProductsByCategory(category));
     }, [dispatch, category]);
 
@@ -42,8 +41,8 @@ const ProductByCategory = () => {
     const productsPerPage = 8;
 
     const [filterValues, setFilterValues] = useState({
-        priceRange: null,
-        rating: null,
+        priceRange: [0, 100000],
+        rating: 0,
     });
 
     const handleChange = (data) => {
