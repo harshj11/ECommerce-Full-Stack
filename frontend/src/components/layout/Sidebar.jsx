@@ -116,14 +116,23 @@ const Sidebar = ({ display, setDisplayFunc }) => {
                         w={['auto', '100%', '100%']}
                     >
                         <CartLink display={['inline-block', 'none']} onClick={() => setDisplayFunc('none')} />
-                        <Button
-                            colorScheme='orange'
-                            mt={['4', '0', '0']}
-                            mx={[0, '4']}
-                            size={['sm', 'md', 'lg']}
+                        <Link
+                            as={RouterLink}
+                            onClick={() => setDisplayFunc('none')}
+                            to='/signup'
+                            _hover={{
+                                borderBottom: 'none'
+                            }}
                         >
-                            Signup
-                        </Button>
+                            <Button
+                                colorScheme='orange'
+                                mt={['4', '0', '0']}
+                                mx={[0, '4']}
+                                size={['sm', 'md', 'lg']}
+                            >
+                                Signup
+                            </Button>
+                        </Link>
                     </Flex>
                 </Flex>
             </Container>

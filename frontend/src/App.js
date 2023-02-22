@@ -13,6 +13,8 @@ import ProductDetails from './components/product/ProductDetails';
 import ProductByCategory from './components/product/ProductByCategory';
 import ErrorPage from './components/layout/ErrorPage';
 import SearchProducts from './components/product/SearchProducts';
+import Login from './components/pages/Login';
+import Signup from './components/pages/Signup';
 
 function App() {
     return (
@@ -34,6 +36,8 @@ function App() {
                 <Route exact path='/product/:id' element={<ProductDetails />} />
                 <Route exact path='/products/:category' element={<ProductByCategory />} />
                 <Route exact path='/search/:keyword' element={<SearchProducts />} />
+                <Route exact path='/login' element={<Login />} />
+                <Route exact path='/signup' element={<Signup />} />
 
             </Routes>
         </Router>
