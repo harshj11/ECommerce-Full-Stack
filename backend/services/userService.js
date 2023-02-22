@@ -3,6 +3,7 @@ const ErrorHandler = require('../utils/errorHandler');
 const sendJWTToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
+const cloudinary = require('cloudinary').v2;
 
 class UserService {
 
@@ -17,9 +18,16 @@ class UserService {
      * or an appropriate failure response, if any error occurs.
      */
     static createUser = async (req, res, next) =>  {
-        
-        const { name, email, password } = req.body;
-        
+        const { name, email, password, avatar } = req.body;
+        let myCloud;
+        if(avatar !== '') {
+            myCloud = await cloudinary.uploader.upload(avatar, {
+                folder: "avatars",
+                width: 150,
+                crop: "scale",
+            });
+        }
+
         /*
             Persist user in db, if any error occurs while saving, send appropriate response. The error
             handling would be done at the place wherever this function would actually be called.
@@ -27,11 +35,11 @@ class UserService {
         const user = await User.create({ 
             name, email, password,
             avatar: {
-                public_id: "Sample Public Id",
-                url: "Profile Picture URL"
-            }
+                public_id: avatar == '' ? 'none' : myCloud.public_id,
+                url: avatar == '' ? 'none' : myCloud.secure_url,
+            },
         });
-
+        
         // Otherwise generate the token return success response.
         sendJWTToken(user, 201, res);
     }
