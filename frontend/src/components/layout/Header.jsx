@@ -110,7 +110,15 @@ const Header = () => {
                     align='center'
                 >
                     <CartLink display={['none', 'inline-block']} />
-                    <Button colorScheme='orange' size={['sm', 'md', 'lg']}>Login</Button>
+                    <Link
+                        as={RouterLink}
+                        to='/login'
+                        _hover={{
+                            borderBottom: 'none'
+                        }}
+                    >
+                        <Button colorScheme='orange' size={['sm', 'md', 'lg']}>Login</Button>
+                    </Link>
                 </Flex>
 
                 <Sidebar display={display} setDisplayFunc={setDisplay} />
